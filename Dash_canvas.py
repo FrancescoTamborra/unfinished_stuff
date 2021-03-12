@@ -1,17 +1,20 @@
+from dash_table import DataTable
+from dash_canvas import DashCanvas
+from dash_canvas.utils import parse_jsonstring
+from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
+
+import cairosvg
+from cairosvg import svg2png
+
+import json
+import dash_html_components as html
+import dash_core_components as dcc
+import dash
 import pandas as pd
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
-
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-import json
-from dash.exceptions import PreventUpdate
-from dash.dependencies import Input, Output, State
-from dash_canvas.utils import parse_jsonstring
-from dash_canvas import DashCanvas
-from dash_table import DataTable
 
 
 app = dash.Dash(__name__)
@@ -38,6 +41,7 @@ app.layout = html.Div([
     ])
 ])
 
+
 @app.callback(
     Output('table', 'data'),
     [Input('canvas', 'json_data')]
@@ -52,7 +56,14 @@ def update_data(string):
         print('path ======', data['objects'][0]['path'])
         svg_path = data['objects'][0]['path']
         print('svg_path == ', svg_path)
-        # use cairo to save the image
+
+        # use cairo to save the image ?
+        #svg2png(bytestring=svg_path, write_to='output_number.png')
+        # nope
+
+        # check this:
+        # https://pypi.org/project/svgpathtools/
+        # https://pypi.org/project/svg.path/
     else:
         print('prevent')
         raise PreventUpdate
